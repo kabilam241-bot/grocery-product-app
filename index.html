@@ -3,104 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grocery Barcode App</title>
+
+<title>গ্রোসারি বারকোড অ্যাপ</title>
 
 <style>
 *{
-  box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f3f4f6;
-  color:#222;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f2f5f3;
+    color:#222;
 }
 
 header{
-  background:#168a45;
-  color:white;
-  text-align:center;
-  padding:18px 10px;
+    background:#168a45;
+    color:white;
+    text-align:center;
+    padding:18px 10px;
 }
 
 header h1{
-  margin:0;
-  font-size:24px;
+    margin:0;
+    font-size:24px;
 }
 
 main{
-  max-width:600px;
-  margin:auto;
-  padding:15px;
+    max-width:600px;
+    margin:auto;
+    padding:15px;
 }
 
 .card{
-  background:white;
-  padding:18px;
-  margin-bottom:15px;
-  border-radius:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.10);
+    background:white;
+    padding:18px;
+    margin-bottom:15px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.10);
+}
+
+h2{
+    margin-top:0;
 }
 
 label{
-  display:block;
-  margin-top:10px;
-  margin-bottom:5px;
-  font-weight:bold;
-}
-
-input,button{
-  width:100%;
-  padding:13px;
-  border-radius:8px;
-  font-size:16px;
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    font-weight:bold;
 }
 
 input{
-  border:1px solid #ccc;
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
 }
 
 button{
-  border:0;
-  background:#168a45;
-  color:white;
-  font-weight:bold;
-  margin-top:12px;
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:0;
+    border-radius:8px;
+    background:#168a45;
+    color:white;
+    font-size:17px;
 }
 
-button.delete{
-  background:#d93025;
+.scan-btn{
+    background:#1769aa;
 }
 
-.product{
-  text-align:center;
+.delete{
+    background:#d93025;
 }
 
 .product img{
-  width:150px;
-  height:150px;
-  object-fit:cover;
-  border-radius:10px;
-  border:1px solid #ddd;
-}
-
-.product h2{
-  margin-bottom:5px;
+    width:100%;
+    max-height:250px;
+    object-fit:contain;
+    border-radius:10px;
+    background:#eee;
 }
 
 .price{
-  font-size:30px;
-  color:#168a45;
-  font-weight:bold;
-  margin:10px;
+    font-size:22px;
+    font-weight:bold;
+    color:#168a45;
+    margin-top:8px;
 }
 
 .barcode{
-  font-size:18px;
-  background:#f1f1f1;
-  padding:10px;
-  border-radius:8px;
+    margin-top:8px;
+    color:#555;
+    word-break:break-all;
+}
+
+#scannerArea{
+    display:none;
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+}
+
+#reader{
+    width:100%;
+    max-width:450px;
+    margin:auto;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:20px;
 }
 </style>
 </head>
@@ -108,196 +128,120 @@ button.delete{
 <body>
 
 <header>
-  <h1>গ্রোসারি বারকোড অ্যাপ</h1>
+<h1>🛒 গ্রোসারি বারকোড অ্যাপ</h1>
 </header>
 
 <main>
 
 <div class="card">
-  <h2>পণ্য যোগ করুন</h2>
 
-  <label>পণ্যের নাম</label>
-  <input id="name" type="text" placeholder="যেমন: Coca Cola">
+<h2>পণ্য যোগ করুন</h2>
 
-  <label>পণ্যের দাম</label>
-  <input id="price" type="number" placeholder="যেমন: 5">
+<label>পণ্যের নাম</label>
 
-  <label>বারকোড</label>
-  <input id="barcode" type="text" placeholder="বারকোড নম্বর লিখুন">
+<input
+id="name"
+type="text"
+placeholder="যেমন: Coca Cola"
+>
 
-  <label>পণ্যের ছবি</label>
-  <input id="photo" type="file" accept="image/*">
+<label>পণ্যের দাম</label>
 
-  <button onclick="addProduct()">পণ্য যোগ করুন</button>
+<input
+id="price"
+type="number"
+step="0.01"
+placeholder="যেমন: 5"
+>
+
+<label>বারকোড</label>
+
+<input
+id="barcode"
+type="text"
+placeholder="বারকোড নম্বর"
+>
+
+<button
+type="button"
+class="scan-btn"
+onclick="startScanner()"
+>
+📷 বারকোড স্ক্যান করুন
+</button>
+
+<label>পণ্যের ছবি</label>
+
+<input
+id="photo"
+type="file"
+accept="image/*"
+>
+
+<button
+type="button"
+onclick="addProduct()"
+>
+➕ পণ্য যোগ করুন
+</button>
+
 </div>
+
+
+<div id="scannerArea">
+
+<h3 style="text-align:center;">
+📷 বারকোড স্ক্যান করুন
+</h3>
+
+<div id="reader"></div>
+
+<button
+type="button"
+onclick="stopScanner()"
+style="background:#d93025;"
+>
+❌ স্ক্যান বন্ধ করুন
+</button>
+
+</div>
+
 
 <div id="products"></div>
 
 </main>
 
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
 <script>
-let products = JSON.parse(localStorage.getItem("products")) || [];
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+let html5QrCode = null;
+
+
+/* পণ্য সংরক্ষণ */
 
 function saveProducts(){
-  localStorage.setItem("products", JSON.stringify(products));
+
+localStorage.setItem(
+"products",
+JSON.stringify(products)
+);
+
 }
+
+
+/* পণ্য যোগ */
 
 function addProduct(){
 
-  const name = document.getElementById("name").value.trim();
-  const price = document.getElementById("price").value.trim();
-  const barcode = document.getElementById("barcode").value.trim();
-  const photo = document.getElementById("photo").files[0];
+const name =
+document.getElementById("name").value.trim();
 
-  if(!name || !price || !barcode){
-    alert("পণ্যের নাম, দাম এবং বারকোড দিন।");
-    return;
-  }
+const price =
+document.getElementById("price").value.trim();
 
-  if(photo){
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-
-      products.push({
-        name:name,
-        price:price,
-        barcode:barcode,
-        image:e.target.result
-      });
-
-      saveProducts();
-      displayProducts();
-      clearForm();
-    };
-
-    reader.readAsDataURL(photo);
-
-  }else{
-
-    products.push({
-      name:name,
-      price:price,
-      barcode:barcode,
-      image:""
-    });
-
-    saveProducts();
-    displayProducts();
-    clearForm();
-  }
-}
-
-function displayProducts(){
-
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-
-  products.forEach(function(product,index){
-
-    const div = document.createElement("div");
-    div.className = "card product";
-
-    div.innerHTML = `
-
-      ${product.image
-      ? `<img src="${product.image}" alt="পণ্যের ছবি">`
-      : `<div style="padding:50px;background:#eee;border-radius:10px;">
-           ছবি নেই
-         </div>`
-      }
-
-      <h2>${product.name}</h2>
-
-      <div class="price">
-        ${product.price}
-      </div>
-
-      <div class="barcode">
-        বারকোড: ${product.barcode}
-      </div>
-
-      <button class="delete" onclick="deleteProduct(${index})">
-        পণ্য মুছুন
-      </button>
-
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-function deleteProduct(index){
-
-  if(confirm("এই পণ্যটি মুছে ফেলবেন?")){
-    products.splice(index,1);
-    saveProducts();
-    displayProducts();
-  }
-}
-
-function clearForm(){
-
-  document.getElementById("name").value="";
-  document.getElementById("price").value="";
-  document.getElementById("barcode").value="";
-  document.getElementById("photo").value="";
-}
-
-displayProducts();
-</script>
-<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
-
-<script>
-const scanButton = document.createElement("button");
-scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
-scanButton.style.cssText =
-  "display:block;width:100%;padding:14px;margin:15px 0;background:#168a45;color:white;border:0;border-radius:8px;font-size:18px;";
-
-const scannerBox = document.createElement("div");
-scannerBox.style.cssText =
-  "display:none;text-align:center;margin:10px 0;";
-
-const video = document.createElement("video");
-video.style.cssText =
-  "width:100%;max-width:400px;border-radius:10px;";
-
-scannerBox.appendChild(video);
-
-document.body.appendChild(scanButton);
-document.body.appendChild(scannerBox);
-
-let scanner;
-
-scanButton.onclick = async function () {
-  scannerBox.style.display = "block";
-  scanButton.innerText = "স্ক্যান হচ্ছে...";
-
-  try {
-    scanner = new ZXingBrowser.BrowserMultiFormatReader();
-
-    await scanner.decodeFromVideoDevice(
-      undefined,
-      video,
-      (result, error) => {
-        if (result) {
-          document.getElementById("barcode").value = result.text;
-
-          scanner.reset();
-          scannerBox.style.display = "none";
-          scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
-
-          alert("বারকোড পাওয়া গেছে: " + result.text);
-        }
-      }
-    );
-  } catch (error) {
-    alert("ক্যামেরা চালু করা যাচ্ছে না। ক্যামেরার অনুমতি দিন।");
-    scannerBox.style.display = "none";
-    scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
-  }
-};
-</script>
-</body>
-</html>
+const barcode
