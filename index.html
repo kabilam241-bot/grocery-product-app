@@ -247,6 +247,57 @@ function clearForm(){
 
 displayProducts();
 </script>
+<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
 
+<script>
+const scanButton = document.createElement("button");
+scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
+scanButton.style.cssText =
+  "display:block;width:100%;padding:14px;margin:15px 0;background:#168a45;color:white;border:0;border-radius:8px;font-size:18px;";
+
+const scannerBox = document.createElement("div");
+scannerBox.style.cssText =
+  "display:none;text-align:center;margin:10px 0;";
+
+const video = document.createElement("video");
+video.style.cssText =
+  "width:100%;max-width:400px;border-radius:10px;";
+
+scannerBox.appendChild(video);
+
+document.body.appendChild(scanButton);
+document.body.appendChild(scannerBox);
+
+let scanner;
+
+scanButton.onclick = async function () {
+  scannerBox.style.display = "block";
+  scanButton.innerText = "স্ক্যান হচ্ছে...";
+
+  try {
+    scanner = new ZXingBrowser.BrowserMultiFormatReader();
+
+    await scanner.decodeFromVideoDevice(
+      undefined,
+      video,
+      (result, error) => {
+        if (result) {
+          document.getElementById("barcode").value = result.text;
+
+          scanner.reset();
+          scannerBox.style.display = "none";
+          scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
+
+          alert("বারকোড পাওয়া গেছে: " + result.text);
+        }
+      }
+    );
+  } catch (error) {
+    alert("ক্যামেরা চালু করা যাচ্ছে না। ক্যামেরার অনুমতি দিন।");
+    scannerBox.style.display = "none";
+    scanButton.innerText = "📷 বারকোড স্ক্যান করুন";
+  }
+};
+</script>
 </body>
 </html>
